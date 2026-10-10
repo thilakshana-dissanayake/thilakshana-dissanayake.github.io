@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Thilakshana Dissanayake — Data Science graduate, AI and computational neuroscience researcher, and Advanced Level Biology educator.">
+  <meta name="theme-color" content="#080d16">
+  <title>Thilakshana Dissanayake</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #0d1422;
+      --outside-background: #080d16;
+      --surface: #111b2a;
+      --navy: #e7edf6;
+      --gray: #aab6c8;
+      --muted: #8290a5;
+      --turquoise: #42e2c2;
+      --turquoise-dark: #35cfb1;
+      --border: #263449;
+      --panel-width: 580px;
+      --vertical-axis: 12px;
+      --vertical-line-width: 2px;
+      --timeline-circle-size: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 90px;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--outside-background);
+      color: var(--navy);
+      font-family: "Inter", sans-serif;
+      line-height: 1.7;
+    }
+
+    a { color: inherit; }
+    button { font: inherit; }
+    img { max-width: 100%; }
+
+    .site-shell {
+      width: min(100%, var(--panel-width));
+      min-height: 100vh;
+      margin-inline: auto;
+      border-inline: 1px solid rgba(0, 0, 0, .24);
+      background: var(--background);
+      box-shadow: 0 0 45px rgba(0, 0, 0, .34);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 522px;
+      margin-inline: auto;
+    }
+
+    .section { padding: 54px 0; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(38, 52, 73, .82);
+      background: rgba(13, 20, 34, .92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: box-shadow .3s, background .3s;
+    }
+
+    .topbar.scrolled {
+      background: rgba(13, 20, 34, .98);
+      box-shadow: 0 5px 25px rgba(0, 0, 0, .28);
+    }
+
+    .nav {
+      position: relative;
+      display: flex;
+      height: 68px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      min-width: 0;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .brand-avatar {
+      display: block;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      border: 2px solid var(--turquoise);
+      border-radius: 50%;
+      padding: 2px;
+      background: var(--background);
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .brand-name {
+      color: var(--navy);
+      font-size: .88rem;
+      font-weight: 750;
+      letter-spacing: -.45px;
+    }
+
+    .brand-name span { color: var(--turquoise-dark); }
+
+    .menu-toggle {
+      display: inline-flex;
+      width: 43px;
+      height: 43px;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--background);
+      color: var(--navy);
+      font-size: 1.15rem;
+      cursor: pointer;
+      transition: background .2s, border-color .2s, color .2s;
+    }
+
+    .menu-toggle:hover {
+      border-color: var(--turquoise);
+      background: #142b2b;
+      color: var(--turquoise-dark);
+    }
+
+    .nav-links {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 5px;
+      padding: 8px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(17, 27, 42, .99);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, .55);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(-8px);
+      transition: opacity .2s, visibility .2s, transform .2s;
+    }
+
+    .nav-links.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .nav-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 9px;
+      padding: 13px 15px;
+      border-radius: 10px;
+      color: var(--gray);
+      font-size: .9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: color .2s, background .2s;
+    }
+
+    .nav-links a:hover {
+      background: #142b2b;
+      color: var(--turquoise-dark);
+    }
+
+    .nav-links i {
+      width: 18px;
+      font-size: .9rem;
+      text-align: center;
+    }
+
+    .menu-toggle:focus-visible,
+    .nav-links a:focus-visible,
+    .brand:focus-visible,
+    .contact-link:focus-visible,
+    button:focus-visible {
+      outline: 3px solid var(--turquoise);
+      outline-offset: 3px;
+    }
+
+    .hero-section {
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(145deg, #0d1422, #10251f);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 30px;
+      padding: 30px 0 48px;
+      text-align: center;
+    }
+
+    .hero-copy { min-width: 0; }
+
+    .profile-panel {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      grid-row: 1;
+      width: 100%;
+      min-width: 0;
+      align-items: center;
+      justify-content: center;
+      margin-top: -84px;
+    }
+
+    .profile-frame {
+      position: relative;
+      width: min(175px, 54vw);
+      height: min(175px, 54vw);
+      flex: 0 0 auto;
+      overflow: hidden;
+      border: 3px solid var(--turquoise);
+      border-radius: 50%;
+      background: var(--background);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, .5);
+    }
+
+    .profile-image {
+      position: absolute;
+      inset: 6px;
+      display: block;
+      width: calc(100% - 12px);
+      height: calc(100% - 12px);
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.35rem, 10vw, 3.15rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -2px;
+    }
+
+    .hero h1 span { color: var(--turquoise-dark); }
+
+    .professional-title {
+      max-width: 500px;
+      margin: 20px auto 0;
+      color: var(--gray);
+      font-size: .93rem;
+      font-weight: 600;
+      line-height: 1.9;
+    }
+
+    .separator {
+      margin: 0 5px;
+      color: var(--turquoise-dark);
+    }
+
+    .hero-description {
+      display: flex;
+      width: 100%;
+      max-width: none;
+      flex-direction: column;
+      gap: 16px;
+      margin: 28px 0 0;
+      text-align: left;
+    }
+
+    .hero-description p {
+      position: relative;
+      width: 100%;
+      padding-left: 34px;
+      color: var(--gray);
+      font-size: .9rem;
+      line-height: 1.9;
+    }
+
+    .hero-description p::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: var(--vertical-axis);
+      width: var(--vertical-line-width);
+      background: var(--turquoise);
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 9px;
+      margin-top: 24px;
+      scroll-margin-top: 100px;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--background);
+      color: var(--gray);
+      font-size: .77rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .2s, border-color .2s, box-shadow .2s;
+    }
+
+    .contact-link:hover {
+      transform: translateY(-3px);
+      border-color: var(--turquoise);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, .28);
+    }
+
+    .contact-link i { font-size: 1rem; }
+    .whatsapp i { color: #25d366; }
+    .linkedin i { color: #0a66c2; }
+    .github i { color: var(--navy); }
+    .email i { color: #ea4335; }
+
+    .section-title {
+      margin-bottom: 25px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      line-height: 1.2;
+    }
+
+    .timeline {
+      position: relative;
+      width: 100%;
+    }
+
+    .timeline::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: var(--vertical-axis);
+      z-index: 0;
+      width: var(--vertical-line-width);
+      background: var(--turquoise);
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin: 0;
+      padding: 14px 0 25px 34px;
+    }
+
+    .timeline-item::before {
+      position: absolute;
+      top: 21px;
+      left: var(--vertical-axis);
+      z-index: 2;
+      width: var(--timeline-circle-size);
+      height: var(--timeline-circle-size);
+      border: 3px solid var(--background);
+      border-radius: 50%;
+      background: var(--turquoise);
+      box-shadow: 0 0 0 2px var(--turquoise);
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    .timeline-item:last-child { padding-bottom: 10px; }
+
+    .item-title {
+      max-width: 100%;
+      font-size: .98rem;
+      font-weight: 650;
+      line-height: 1.5;
+      letter-spacing: -.2px;
+    }
+
+    .item-subtitle {
+      margin-top: 4px;
+      color: var(--gray);
+      font-size: .86rem;
+      font-weight: 500;
+    }
+
+    .item-date {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    .item-description {
+      max-width: 100%;
+      margin-top: 9px;
+      color: var(--gray);
+      font-size: .83rem;
+      line-height: 1.75;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 13px;
+    }
+
+    .detail-card {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+
+    .detail-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 12px;
+      color: var(--navy);
+      font-size: 1rem;
+    }
+
+    .detail-card h3 i { color: var(--turquoise); }
+
+    .detail-card ul {
+      display: grid;
+      gap: 9px;
+      padding-left: 19px;
+      color: var(--gray);
+      font-size: .84rem;
+    }
+
+    .gpa-list {
+      list-style: none;
+      padding-left: 0 !important;
+    }
+
+    .gpa-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .gpa-list strong {
+      flex: 0 0 auto;
+      color: var(--turquoise);
+    }
+
+    .publication-card {
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+
+    .publication-card h3 {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .publication-card p {
+      margin-top: 9px;
+      color: var(--gray);
+      font-size: .84rem;
+    }
+
+    .publication-card a {
+      color: var(--turquoise);
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .publication-card a:hover { text-decoration: underline; }
+
+    .footer {
+      padding: 30px 0;
+      border-top: 1px solid var(--border);
+      background: var(--background);
+    }
+
+    .footer-inner { text-align: center; }
+
+    .footer-copy {
+      color: var(--gray);
+      font-size: .82rem;
+    }
+
+    .back-to-top {
+      position: fixed;
+      right: max(18px, calc((100vw - var(--panel-width)) / 2 + 18px));
+      bottom: 22px;
+      z-index: 1200;
+      display: flex;
+      width: 46px;
+      height: 46px;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 14px;
+      background: var(--turquoise);
+      color: #07131a;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(66, 226, 194, .24);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: opacity .25s, visibility .25s, transform .25s, background .2s;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover { background: var(--turquoise-dark); }
+
+    @media (max-width: 360px) {
+      .brand-name { font-size: .76rem; }
+      .brand-avatar { width: 35px; height: 35px; flex-basis: 35px; }
+      .profile-frame { width: min(160px, 52vw); height: min(160px, 52vw); }
+      .profile-panel { margin-top: -72px; }
+      .contact-links { gap: 7px; }
+      .contact-link { padding: 8px 9px; }
+      .gpa-list li { font-size: .78rem; }
+    }
+
+    @media (max-width: 580px) {
+      body { background: var(--outside-background); }
+      .site-shell {
+        width: 100%;
+        border-right: 0;
+        border-left: 0;
+        box-shadow: none;
+      }
+      .back-to-top { right: 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="site-shell">
+    <header class="topbar" id="topbar">
+      <div class="container nav">
+        <a class="brand" href="#home" aria-label="Thilakshana Dissanayake home">
+          <img class="brand-avatar" src="profile.jpg" alt="Thilakshana Dissanayake">
+          <span class="brand-name">Thilakshana <span>Dissanayake</span></span>
+        </a>
+
+        <button
+          class="menu-toggle"
+          id="menuToggle"
+          type="button"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="navLinks"
+        >
+          <i class="fa-solid fa-bars" id="menuIcon" aria-hidden="true"></i>
+        </button>
+
+        <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+          <a href="#experience" class="nav-link">
+            <i class="fa-solid fa-briefcase" aria-hidden="true"></i> Experience
+          </a>
+          <a href="#education" class="nav-link">
+            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Education
+          </a>
+          <a href="#research" class="nav-link">
+            <i class="fa-solid fa-microscope" aria-hidden="true"></i> Research
+          </a>
+          <a href="#publications" class="nav-link">
+            <i class="fa-solid fa-book-open" aria-hidden="true"></i> Publications
+          </a>
+          <a href="#contact" class="nav-link">
+            <i class="fa-regular fa-envelope" aria-hidden="true"></i> Contact
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero-section" id="home" aria-labelledby="name">
+        <div class="container hero">
+          <div class="hero-copy">
+            <h1 id="name">Thilakshana<br><span>Dissanayake</span></h1>
+
+            <p class="professional-title">
+              AI &amp; Computational Neuroscience Researcher
+              <span class="separator">|</span>
+              First Class Data Science Graduate
+              <span class="separator">|</span>
+              Advanced Level Biology Educator
+            </p>
+
+            <div class="hero-description">
+              <p>Researcher in Artificial Intelligence, Computational Neuroscience, and Brain-Inspired Computing, interested in exploring connections between technology and the human brain.</p>
+              <p>Advanced Level Biology Educator with over six years of experience delivering engaging lessons and encouraging scientific curiosity.</p>
+            </div>
+
+            <div class="contact-links" id="contact" aria-label="Contact links">
+              <a class="contact-link whatsapp" href="https://wa.me/94764871191" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp
+              </a>
+              <a class="contact-link linkedin" href="https://www.linkedin.com/in/thilakshana-dissanayake/" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i> LinkedIn
+              </a>
+              <a class="contact-link github" href="https://github.com/YOUR_GITHUB_USERNAME" target="_blank" rel="noopener noreferrer">
+                <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub
+              </a>
+              <a class="contact-link email" href="mailto:thilakshanadissanayake@gmail.com">
+                <i class="fa-solid fa-envelope" aria-hidden="true"></i> Email
+              </a>
+            </div>
+          </div>
+
+          <div class="profile-panel">
+            <div class="profile-frame">
+              <img class="profile-image" src="profile.jpg" alt="Portrait of Thilakshana Dissanayake" width="500" height="500">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="experience" aria-labelledby="experience-title">
+        <div class="container">
+          <h2 class="section-title" id="experience-title">Work Experience</h2>
+          <div class="timeline">
+            <article class="timeline-item">
+              <h3 class="item-title">Advanced Level Biology Educator</h3>
+              <p class="item-subtitle">Self-employed</p>
+              <p class="item-date">September 2019 - Present</p>
+              <p class="item-description">Delivering engaging Biology lessons and encouraging scientific curiosity in students.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="education" aria-labelledby="education-title">
+        <div class="container">
+          <h2 class="section-title" id="education-title">Education</h2>
+          <div class="timeline">
+            <article class="timeline-item">
+              <h3 class="item-title">BSc (Hons) in Information Technology</h3>
+              <p class="item-subtitle">Specialised in Data Science · Sri Lanka Institute of Information Technology (SLIIT)</p>
+              <p class="item-date">June 2022 - June 2026</p>
+              <p class="item-description">First Class Honours.</p>
+            </article>
+
+            <article class="timeline-item">
+              <h3 class="item-title">Pearson BTEC Level 5 HND in Computing - Cyber Security</h3>
+              <p class="item-subtitle">ESOFT Metro Campus</p>
+              <p class="item-date">January 2023 - January 2025</p>
+            </article>
+
+            <article class="timeline-item">
+              <h3 class="item-title">Diploma in Information Technology</h3>
+              <p class="item-subtitle">Institute of Management &amp; Business Studies</p>
+              <p class="item-date">May 2021 - May 2022</p>
+              <p class="item-description">Distinction.</p>
+            </article>
+
+            <article class="timeline-item">
+              <h3 class="item-title">BSc (Hons) Computer Science Programme</h3>
+              <p class="item-subtitle">Rajarata University of Sri Lanka</p>
+              <p class="item-date">May 2021 - May 2022</p>
+              <p class="item-description">Selected for admission and completed the first year.</p>
+            </article>
+
+            <article class="timeline-item">
+              <h3 class="item-title">Certificate Course in Computer Science</h3>
+              <p class="item-subtitle">National Institute of Business Management (NIBM - Sri Lanka)</p>
+              <p class="item-date">July 2021 - December 2021</p>
+              <p class="item-description">Grade: 89%.</p>
+            </article>
+
+            <article class="timeline-item">
+              <h3 class="item-title">Diploma in Information Technology and English</h3>
+              <p class="item-subtitle">ICBT Campus</p>
+              <p class="item-date">January 2020 - January 2021</p>
+              <p class="item-description">Distinction.</p>
+            </article>
+
+            <article class="timeline-item">
+              <h3 class="item-title">G.C.E. A/L - Biological Science Stream</h3>
+              <p class="item-subtitle">Mahamaya Girls' College</p>
+              <p class="item-date">January 2017 - August 2019</p>
+              <p class="item-description">Biology, Physics, and Chemistry. Selected for the Computer Science programme at Rajarata University.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="research" aria-labelledby="research-title">
+        <div class="container">
+          <h2 class="section-title" id="research-title">Research Experience</h2>
+          <div class="timeline">
+            <article class="timeline-item">
+              <h3 class="item-title">Final-Year Research Project</h3>
+              <p class="item-subtitle">Research area: Digital Signal Processing</p>
+              <p class="item-date">June 2025 - June 2026</p>
+              <p class="item-description">Grade: A.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="publications" aria-labelledby="publications-title">
+        <div class="container">
+          <h2 class="section-title" id="publications-title">Publications</h2>
+          <article class="publication-card">
+            <h3>DaSSRNet: Domain-Adaptive and Semi-Supervised Signal Processing for Singing Voice Register Classification</h3>
+            <p>Published at IEEE CSPA 2026 · May 2026 · Conference h-index: 16</p>
+            <p>DOI: <a href="https://doi.org/10.1109/CSPA68262.2026.11517907" target="_blank" rel="noopener noreferrer">10.1109/CSPA68262.2026.11517907</a></p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="interests-title">
+        <div class="container detail-grid">
+          <article class="detail-card">
+            <h3 id="interests-title"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i> Interests</h3>
+            <ul>
+              <li>Artificial Intelligence</li>
+              <li>Computational Neuroscience</li>
+              <li>Brain-Inspired Computing</li>
+              <li>Neuroscience of Music</li>
+            </ul>
+          </article>
+
+          <article class="detail-card">
+            <h3><i class="fa-solid fa-award" aria-hidden="true"></i> Honours &amp; Awards</h3>
+            <ul>
+              <li>Dean's List Awards - SLIIT</li>
+            </ul>
+            <ul class="gpa-list" aria-label="Dean's List semester GPAs">
+              <li><span>Year 4, Semester 2</span><strong>3.95</strong></li>
+              <li><span>Year 4, Semester 1</span><strong>3.70</strong></li>
+              <li><span>Year 3, Semester 2</span><strong>3.77</strong></li>
+              <li><span>Year 2, Semester 2</span><strong>3.72</strong></li>
+              <li><span>Year 2, Semester 1</span><strong>3.72</strong></li>
+              <li><span>Year 1, Semester 2</span><strong>3.81</strong></li>
+            </ul>
+          </article>
+
+          <article class="detail-card">
+            <h3><i class="fa-solid fa-users" aria-hidden="true"></i> Memberships</h3>
+            <ul>
+              <li>IEEE Member</li>
+              <li>SLIIT Alumni Member</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <p class="footer-copy">© 2026 Thilakshana Dissanayake. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+  </button>
+
+  <script>
+    "use strict";
+
+    const topbar = document.getElementById("topbar");
+    const menuToggle = document.getElementById("menuToggle");
+    const menuIcon = document.getElementById("menuIcon");
+    const navLinks = document.getElementById("navLinks");
+    const navigationLinks = document.querySelectorAll(".nav-link");
+    const backToTopButton = document.getElementById("backToTop");
+
+    function setMenuState(isOpen) {
+      navLinks.classList.toggle("open", isOpen);
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen ? "Close navigation menu" : "Open navigation menu"
+      );
+      menuIcon.classList.toggle("fa-bars", !isOpen);
+      menuIcon.classList.toggle("fa-xmark", isOpen);
+    }
+
+    menuToggle.addEventListener("click", function () {
+      const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+      setMenuState(!isOpen);
+    });
+
+    navigationLinks.forEach(function (link) {
+      link.addEventListener("click", function () {
+        setMenuState(false);
+      });
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!topbar.contains(event.target)) {
+        setMenuState(false);
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && menuToggle.getAttribute("aria-expanded") === "true") {
+        setMenuState(false);
+        menuToggle.focus();
+      }
+    });
+
+    window.addEventListener("resize", function () {
+      setMenuState(false);
+    });
+
+    function updateScrollEffects() {
+      topbar.classList.toggle("scrolled", window.scrollY > 15);
+      backToTopButton.classList.toggle("show", window.scrollY > 400);
+    }
+
+    window.addEventListener("scroll", updateScrollEffects, { passive: true });
+    updateScrollEffects();
+
+    backToTopButton.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>
